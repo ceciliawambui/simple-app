@@ -11,35 +11,48 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
 from pathlib import Path
+from decouple import config
+import os
+import dj_database_url
+import sys
+
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.append(BASE_DIR)
 
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-)w$j+^bekm)q)=90_l2ubf254th41--ge$0orxjhq!#0vqb-0s'
+# SECRET_KEY = 'django-insecure-)w$j+^bekm)q)=90_l2ubf254th41--ge$0orxjhq!#0vqb-0s'
+SECRET_KEY = config('SECRET_KEY')
+
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-# ALLOWED_HOSTS = []
-ALLOWED_HOSTS = ['simple-app-27tx.onrender.com']
+ALLOWED_HOSTS = []
+# ALLOWED_HOSTS = ['simple-app-27tx.onrender.com']
 
-import os
-import dj_database_url
 
-if not DEBUG:
-    DATABASES = {'default': dj_database_url.parse(os.environ.get('postgres://testdb_edq4_user:JL3Kvpy4YBiXPsxd9DjKDTvlsSFWUdG2@dpg-cpoi35qj1k6c73a7n5vg-a/testdb_edq4'))}
-else:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': 'db.sqlite3',
-        }}
+
+DATABASES = {
+    'default': dj_database_url.parse(config("DATABASE_URL"))
+    }
+
+
+# if not DEBUG:
+#     DATABASES = {'default': dj_database_url.parse(os.environ.get('postgres://testdb_edq4_user:JL3Kvpy4YBiXPsxd9DjKDTvlsSFWUdG2@dpg-cpoi35qj1k6c73a7n5vg-a/testdb_edq4'))}
+# else:
+#     DATABASES = {
+#         'default': {
+#             'ENGINE': 'django.db.backends.sqlite3',
+#             'NAME': 'db.sqlite3',
+#         }}
 
 
 # Application definition
@@ -95,17 +108,26 @@ WSGI_APPLICATION = 'secondproject.wsgi.application'
 #         'NAME': BASE_DIR / 'db.sqlite3',
 #     }
 # }
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'blogsite',
+#         'USER': 'bloguser',
+#         'PASSWORD': '123456',
+#         'HOST': 'localhost',
+#         'PORT': '5432',
+#     }
+# }
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'blogsite',
-        'USER': 'bloguser',
-        'PASSWORD': '123456',
-        'HOST': 'localhost',
-        'PORT': '5432',
+        'NAME': config('DB_NAME'),
+        'USER': config('DB_USER'),
+        'PASSWORD': config('DB_PASS'),
+        'HOST': config('DB_HOST'),
+        'PORT': config('DB_PORT'),
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
