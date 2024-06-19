@@ -29,6 +29,18 @@ DEBUG = True
 # ALLOWED_HOSTS = []
 ALLOWED_HOSTS = ['simple-app-27tx.onrender.com']
 
+import os
+import dj_database_url
+
+if not DEBUG:
+    DATABASES = {'default': dj_database_url.parse(os.environ.get('postgres://testdb_edq4_user:JL3Kvpy4YBiXPsxd9DjKDTvlsSFWUdG2@dpg-cpoi35qj1k6c73a7n5vg-a/testdb_edq4'))}
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': 'db.sqlite3',
+        }}
+
 
 # Application definition
 
@@ -50,6 +62,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
 
 ROOT_URLCONF = 'secondproject.urls'
@@ -131,6 +144,8 @@ USE_TZ = True
 # STATIC_URL = 'static/'
 STATIC_URL = '/static/' 
 # STATICFILES_DIRS = [BASE_DIR / "static"] 
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 
 # Default primary key field type
